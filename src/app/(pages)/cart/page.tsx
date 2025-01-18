@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 function Page() {
   return (
-    <div>
+    <div className='mt-20'>
             <div className=''>
             <BgImage imageSrc={'/Rectangle 1.png'} heading={'Cart'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Cart'}/>
         </div>

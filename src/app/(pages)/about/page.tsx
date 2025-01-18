@@ -5,7 +5,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div>
+    <div className='mt-20'>
         <div>
         <BgImage imageSrc={'/Rectangle 1.png'} heading={'About'} paragraph={'Home'} icon={<ChevronRight />} iconText={'About'}/>
         </div>

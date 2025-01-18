@@ -1,43 +1,95 @@
-import Image from 'next/image'
+'use client'
+import { useEffect, useState } from "react";
+import { createClient } from "@sanity/client";
+import Image from "next/image";
 
-interface Product {
-  id: number;
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
+import { client } from "@/sanity/lib/client";
+
+// Define your product type
+type Product = {
+  _id: string;
   name: string;
+  description: string;
   price: number;
-  image: string;
-}
+  imageUrl: string;
+  discountPercentage: number;
+  stockLevel: number;
+  category: string;
+  isFeaturedProduct: boolean;
+};
 
-const products: Product[] = [
-  { id: 1, name: "Side Table", price:2500000, image: "/Trenton modular sofa_3 1.png" },
-  { id: 2, name: "Coffee Table", price: 2500000, image: "/Granite dining table with dining chair 1.png" },
-  { id: 3, name: "Dining Table", price: 2500000, image: "/Outdoor bar table and stool 1.png" },
-  { id: 4, name: "Console Table", price: 2500000, image: "/Plain console with teak mirror 1.png" },
-]
 
-export default function ProductCards() {
+
+export default function SecCard() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      // Using client.fetch to get data
+      const data = await client.fetch(
+        `*[_type == 'product']{
+          _id,
+          name,
+          description,
+          price,
+          discountPercentage,
+          "imageUrl": image.asset->url,
+          stockLevel,
+          category,
+          isFeaturedProduct
+        }`
+      );
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg overflow-hidden">
-            <div className="relative h-64">
+    <div className="my-5 mx-5">
+      <Carousel
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+      className="w-full max-w-7xl mx-auto"
+    >
+      <CarouselContent className="-ml-2 md:-ml-4">
+      {products.map((product, index) => (
+          <CarouselItem key={index} className="md:basis-1/4 lg:basis-1/3">
+          <div
+            className="border p-4 flex flex-col items-center bg-white rounded-lg shadow-md"
+            key={product._id}
+          >
+            <div
+              className="w-48 h-48 relative overflow-hidden rounded-md"
+              style={{ position: "relative" }}
+            >
               <Image
-                src={product.image}
+                src={product.imageUrl}
                 alt={product.name}
                 layout="fill"
                 objectFit="cover"
               />
             </div>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
-              <p className="text-lg font-bold text-gray-900">
-                Rs. {product.price.toLocaleString('en-IN')}
-              </p>
-            </div>
+            <h2 className="text-lg font-semibold mt-4">{product.name}</h2>
+            <p className="text-gray-600 mt-2 text-sm">{product.description}</p>
+            <p className="text-green-600 font-bold mt-2">${product.price}</p>
           </div>
+          </CarouselItem>
         ))}
-      </div>
+      </CarouselContent>
+      <CarouselPrevious className="ml-3" />
+      <CarouselNext className="mr-3"/>
+      </Carousel>
     </div>
-  )
+  );
 }
-

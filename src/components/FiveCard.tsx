@@ -110,8 +110,8 @@ export default function ProductCarousel() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="ml-3" />
+      <CarouselNext className="mr-3"/>
     </Carousel>
   )
 }

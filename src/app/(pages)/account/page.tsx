@@ -7,7 +7,7 @@ import { ChevronRight } from 'lucide-react'
 
 function account() {
   return (
-    <div>
+    <div className='mt-20'>
       <div className=''>
           <BgImage imageSrc={'/Rectangle 1.png'} heading={'My Account'} paragraph={'Home'} icon={<ChevronRight />} iconText={'My account'}/>
         </div>

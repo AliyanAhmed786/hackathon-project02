@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { Poppins } from 'next/font/google';
+import Link from 'next/dist/client/link';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -25,11 +26,13 @@ function Hero() {
           </h1>
 
           {/* Shop Now Button */}
+          <Link href="/shop">
           <Button 
             variant="ghost" 
             className='bg-myyellow text-black border-b-2 rounded-none hover:bg-black hover:text-white border-black w-[121px] h-12'>
             Shop Now
           </Button>
+          </Link>
         </div>
 
         {/* Image Container */}

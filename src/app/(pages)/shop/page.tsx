@@ -7,25 +7,16 @@ import { AlignLeft, ChevronRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import Link from 'next/dist/client/link'
 import BgImage from '@/components/BgImage'
+import ShopCard from '@/components/ShopCard'
 
 function page() {
   return (
-    <div>
+    <div className='mt-32'>
       <div className=''>
       <BgImage imageSrc={'/Rectangle 1.png'} heading={'Shop'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Shop'}/>
-
         </div>
-
-        
-
-
         <div>
-        <SecCard/>
-        <SecCard/>
-        <SecCard/>
-        <SecCard/>
-        <SecCard/>
-
+        <ShopCard/>
         </div>
 
         <div className='flex justify-center space-x-4'>

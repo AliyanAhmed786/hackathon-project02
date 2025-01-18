@@ -8,7 +8,8 @@ import { ChevronRight, Clock, Phone } from "lucide-react";
 import Image from "next/image";
 
 export default function ContactPage() {
-  return (<div>
+  return (
+  <div className='mt-20'>
     <div className=''>
     <BgImage imageSrc={'/Rectangle 1.png'} heading={'Contact'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Contact'}/>
         </div>

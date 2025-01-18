@@ -5,7 +5,8 @@ import { ChevronRight, Search } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
-  return (<div>
+  return (
+  <div className='mt-20'>
     <div className=''>
     <BgImage imageSrc={'/Rectangle 1.png'} heading={'Blog'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Blog'}/>        </div>
     <div className="flex flex-col lg:flex-row gap-8 px-4 lg:px-10">

@@ -8,7 +8,7 @@ import ThirdSection from '@/components/ThirdSection'
 
 function page() {
   return (
-    <div>
+    <div className='mt-28'>
       <div className="font-sans">
   <div className="p-4 lg:max-w-5xl max-w-lg mx-auto">
     <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 max-lg:gap-12">

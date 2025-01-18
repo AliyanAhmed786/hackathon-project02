@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function Checkout() {
   return (
-    <div>
+    <div className='mt-20'>
       <div className=''>
       <BgImage imageSrc={'/Rectangle 1.png'} heading={'Check Out'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Check Out'}/>
         </div>

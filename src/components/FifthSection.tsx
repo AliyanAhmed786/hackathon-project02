@@ -18,7 +18,7 @@ function FifthSection() {
       <Link href="/blog">
       <Button 
   variant="ghost" 
-  className="text-black text-lg sm:text-xl lg:text-2xl border-b-2 rounded-none border-black w-[121px] h-12 mx-auto lg:mx-0">
+  className="text-black text-lg sm:text-xl lg:text-2xl border-b-2 rounded-none border-black w-[183px] h-10 mx-auto lg:mx-0">
   <span className="inline-block px-2 py-1 hover:bg-black hover:text-white transition-all">
     View More Post
   </span>

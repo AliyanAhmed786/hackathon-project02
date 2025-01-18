@@ -1,6 +1,7 @@
 import React from 'react'
 import SecCard from './SecCard'
 import { Button } from './ui/button'
+import Link from 'next/dist/client/link'
 
 function ThirdSection() {
   return (
@@ -18,11 +19,13 @@ function ThirdSection() {
         <SecCard />
       </div>
       <div className='flex justify-center'>
+      <Link href="/shop">
       <Button 
               variant="ghost" 
               className=' text-black text-lg sm:text-xl lg:text-2xl border-b-2 rounded-none hover:bg-black hover:text-white border-black w-[121px] h-12 mx-auto lg:mx-0'>
               View More
             </Button>
+      </Link>
       </div>
     </div>
   )
