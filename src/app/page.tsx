@@ -1,4 +1,3 @@
-
 import FifthSection from "@/components/FifthSection";
 import ForthSection from "@/components/ForthSection";
 import Hero from "@/components/Hero";

@@ -1,5 +1,6 @@
 import { useStore } from "@/Store/usestore";
 
+
 export default function Cart() {
   const { cartItems, removeFromCart, clearCart } = useStore(); // Access Zustand store
 

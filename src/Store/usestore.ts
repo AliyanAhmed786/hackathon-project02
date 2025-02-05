@@ -1,3 +1,4 @@
+// store.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -18,64 +19,94 @@ interface CartItem extends Product {
   quantity: number;
 }
 
+// Profile type
+interface UserProfile {
+  dob: string | number | readonly string[] | undefined;
+  password: string | number | readonly string[] | undefined;
+  gender: string | readonly string[];
+  firstName: string;
+  lastName: string;
+  country: string;
+  street: string;
+  city: string;
+  zip: string;
+  phone: string;
+  email: string;
+  additionalInfo: string;
+}
+
 // Store state interface
 interface StoreState {
-  products: Product[]; // All products in the store
-  cartItems: CartItem[]; // Cart items
-  wishlistItems: Product[]; // Full product objects in the wishlist
-  addProducts: (productList: Product[]) => void; // Add all products
+  products: Product[];
+  cartItems: CartItem[];
+  wishlistItems: Product[];
+  profile: UserProfile;
+  isLoggedIn: boolean;
+  addProducts: (productList: Product[]) => void;
   addToCart: (product: Product) => void;
   clearCart: () => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   addToWishlist: (product: Product) => void;
   removeFromWishlist: (productId: string) => void;
-  getProductById: (productId: string) => Product | undefined; // Get single product details
-  getWishlistProducts: () => Product[]; // Get products in the wishlist
+  getProductById: (productId: string) => Product | undefined;
+  getWishlistProducts: () => Product[];
+  setProfile: (profileData: UserProfile) => void;
+  login: () => void;
+  logout: () => void;
 }
 
 // Zustand store creation with persist middleware
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
-      products: [], // Initialize with an empty product list
+      products: [],
       cartItems: [],
       wishlistItems: [],
+      profile: {
+        firstName: "",
+        lastName: "",
+        country: "Pakistan",
+        street: "",
+        city: "",
+        zip: "",
+        phone: "",
+        email: "",
+        additionalInfo: "",
+        dob: "",
+        password: "",
+        gender: "",
+      },
+      isLoggedIn: false, // Login state
 
-      // Add products to the store
       addProducts: (productList) => set({ products: productList }),
 
-      // Add product to cart
       addToCart: (product) =>
         set((state) => {
           const existingItem = state.cartItems.find((item) => item._id === product._id);
           if (existingItem) {
-            // Update quantity if product exists in cart
             return {
               cartItems: state.cartItems.map((item) =>
                 item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
               ),
             };
           } else {
-            // Add new product to the cart with default quantity 1
             return {
               cartItems: [...state.cartItems, { ...product, quantity: 1 }],
             };
           }
         }),
 
-      // Remove product from cart
       removeFromCart: (productId) =>
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item._id !== productId),
         })),
 
-        clearCart: () =>
-          set(() => ({
-            cartItems: [],
-          })),
+      clearCart: () =>
+        set(() => ({
+          cartItems: [],
+        })),
 
-      // Update product quantity in cart
       updateQuantity: (productId, quantity) =>
         set((state) => ({
           cartItems: state.cartItems.map((item) =>
@@ -83,33 +114,32 @@ export const useStore = create<StoreState>()(
           ),
         })),
 
-      // Add product to wishlist
       addToWishlist: (product) =>
         set((state) => {
           if (!state.wishlistItems.some((item) => item._id === product._id)) {
-            const updatedWishlist = [...state.wishlistItems, product];
-            console.log("Wishlist Updated:", updatedWishlist); // Debug log
-            return { wishlistItems: updatedWishlist };
+            return { wishlistItems: [...state.wishlistItems, product] };
           }
-          return state; // Avoid duplicates
+          return state;
         }),
 
-      // Remove product from wishlist
       removeFromWishlist: (productId) =>
-        set((state) => {
-          const updatedWishlist = state.wishlistItems.filter((item) => item._id !== productId);
-          console.log("Wishlist Updated after removal:", updatedWishlist); // Debug log
-          return { wishlistItems: updatedWishlist };
-        }),
+        set((state) => ({
+          wishlistItems: state.wishlistItems.filter((item) => item._id !== productId),
+        })),
 
-      // Get product details by ID
       getProductById: (productId) => get().products.find((product) => product._id === productId),
 
-      // Get products in the wishlist
       getWishlistProducts: () => get().wishlistItems,
+
+      setProfile: (profileData) => set({ profile: profileData }),
+
+      // Login and logout methods
+      login: () => set({ isLoggedIn: true }),
+
+      logout: () => set({ isLoggedIn: false }),
     }),
     {
-      name: "e-commerce-storage", // Local storage key
+      name: "e-commerce-storage", 
       storage: {
         getItem: (name) => {
           const item = window.localStorage.getItem(name);

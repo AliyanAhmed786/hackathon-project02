@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Menu, Search, Heart, ShoppingCart, User, Image } from "lucide-react";
 import { useStore } from "@/Store/usestore"; // Import Zustand store
 import { Button } from "../ui/button";
 import { client } from "@/sanity/lib/client";
+import Account from "@/components/Account";
+import { Dropdown } from "react-day-picker";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+
 
 interface Product {
   _id: string;
@@ -39,6 +44,13 @@ function Header() {
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
   ];
+  const router = useRouter()
+
+
+  const handleLogout = () => {
+    alert('Logged out successfully!') // Replace this with actual logout logic
+    router.push('/login') // Redirect user to login page after logout
+  }
 
   const navbarColor = pathname === "/" ? "bg-myyellow text-black" : "bg-white text-black";
 
@@ -138,9 +150,16 @@ function Header() {
 
           {/* Right-Side Icons */}
           <div className="flex space-x-4 items-center order-1 md:order-2 md:space-x-6">
-            <Link href="/account">
-              <User className="cursor-pointer hover:text-yellow-500" />
-            </Link>
+            <div>
+            <DropdownMenu>
+      <DropdownMenuTrigger className="cursor-pointer">
+        <User className="hover:text-yellow-500" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+            </div>
             <Search className="cursor-pointer hover:text-yellow-500" onClick={toggleSearchSheet} />
             <Link href="/wishlist">
               <div className="relative">
@@ -244,7 +263,8 @@ function Header() {
             </ul>
           )}
           <div className="mt-4 sm:mt-6 sticky bottom-0 left-0 right-0 bg-white py-4">
-            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white text-lg">CHECK OUT</Button>
+            <Link href='/cart'><Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white text-lg">CHECK OUT</Button>
+          </Link>
           </div>
         </SheetContent>
       </Sheet>

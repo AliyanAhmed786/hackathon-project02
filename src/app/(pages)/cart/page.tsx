@@ -1,139 +1,117 @@
-import React from 'react';
-import Image from 'next/image';
-import { ChevronRight, Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import TextSection from '@/components/TextSection';
-import BgImage from '@/components/BgImage';
-import Link from 'next/link';
+"use client";
+import { useStore } from "@/Store/usestore";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-function Page() {
+export default function Checkout() {
+  const { cartItems, clearCart, removeFromCart, updateQuantity } = useStore(); // 👈 Use updateQuantity
+  const router = useRouter();
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      router.push("/cart");
+    }
+  }, [cartItems, router]);
+
+  
+
+  const handleDecrement = (itemId: string, quantity: number) => {
+    if (quantity > 1) {
+      updateQuantity(itemId, quantity - 1); // Decrement only if quantity is greater than 1
+    }
+  };
+
+  const handleIncrement = (itemId: string, quantity: number) => {
+    updateQuantity(itemId, quantity + 1); // Always allow increment
+  };
+
+  console.log(cartItems); // Check the incoming data
+
   return (
-    <div className='mt-20'>
-            <div className=''>
-            <BgImage imageSrc={'/Rectangle 1.png'} heading={'Cart'} paragraph={'Home'} icon={<ChevronRight />} iconText={'Cart'}/>
-        </div>
+    <div className="mt-20">
+      <div className="max-w-screen-xl mx-auto px-4 py-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          <div className="w-full lg:w-2/3 bg-gray-50 p-6 rounded-lg shadow-md">
+            <h3 className="text-2xl font-bold mb-4">Cart</h3>
 
-    <div className="max-w-screen-xl my-10 mx-auto">
-      {/* Shopping Cart Layout */}
-      <div className="flex flex-col lg:flex-row gap-8 px-4 py-10">
-        
-        {/* Product List (Left side) */}
-        <div className="w-full lg:w-2/3 bg-gray-50 p-4 rounded-lg shadow-md">
-          {/* Header Table for Large Screens */}
-          <div className="hidden lg:grid grid-cols-5 gap-4 bg-myyellow p-3 rounded-t-lg text-center">
-            <h4>Product</h4>
-            <h4>Price</h4>
-            <h4>Quantity</h4>
-            <h4>Subtotal</h4>
-            <h4>Remove</h4>
-          </div>
 
-          {/* Product Card for Smaller Screens (Mobile/Tablet) */}
-          <div className="lg:hidden bg-white rounded-lg shadow-md p-4 mb-4">
-            {/* Product Info (Image and Name) */}
-            <div className="flex flex-col sm:flex-row items-start space-x-4">
-              <Image
-                src="/Rectangle 1.png"
-                width={100}
-                height={100}
-                alt="Product Image"
-                className="rounded-md"
-              />
-              <div className="flex flex-col justify-start">
-                <h4 className="text-xl font-semibold">Rocket Single Seater</h4>
-                <div className="flex justify-between mt-2">
-                  <span>Rs. 50,000.00</span>
-                  <input
-                    type="number"
-                    value="1"
-                    className="w-16 p-2 border border-gray-300 rounded-md text-center"
+            {cartItems.map((item) => (
+              <div key={item._id} className="flex flex-col lg:flex-row items-center justify-between p-4 border-b">
+                <div className="flex items-center space-x-4 w-full lg:w-auto">
+                  <Image 
+                    src={item.imageUrl} 
+                    alt={item.name} 
+                    width={80} 
+                    height={80} 
+                    className="rounded-md object-cover"
                   />
+                  <h4 className="font-semibold">{item.name}</h4>
                 </div>
+
+                <div className="hidden lg:block text-center w-24">{item.price} Rs</div>
+
+                {/* Quantity Controls */}
+                <div className="flex items-center space-x-2 w-28">
+                  <button 
+                    className="px-3 py-1 bg-gray-300 rounded-md"
+                    onClick={() => handleDecrement(item._id, item.quantity)} // Decrement only if quantity > 1
+                  >
+                    -
+                  </button>
+                  <input 
+                    type="number" 
+                    value={item.quantity} 
+                    className="w-12 p-2 border rounded-md text-center"
+                    readOnly
+                  />
+                  <button 
+                    className="px-3 py-1 bg-gray-300 rounded-md"
+                    onClick={() => handleIncrement(item._id, item.quantity)} // Increment always works
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div className="hidden lg:block text-center w-24">{item.price * item.quantity} Rs</div>
+
+                {/* Remove Item Button */}
+                <Trash 
+                  className="text-red-500 cursor-pointer hover:text-red-700"
+                  onClick={() => removeFromCart(item._id)}
+                />
               </div>
-            </div>
-
-            {/* Subtotal and Remove */}
-            <div className="flex justify-between items-center mt-4">
-              <h4 className="text-xl">Rs. 50,000.00</h4>
-              <Trash className="text-red-500 cursor-pointer" />
-            </div>
+            ))}
           </div>
 
-          {/* Product Row for Larger Screens */}
-          <div className="hidden lg:flex items-center justify-between p-4 border-b">
-            {/* Product Info (Image and Name) */}
-            <div className="flex items-center space-x-4 w-full sm:w-auto">
-              <Image
-                src="/Rectangle 1.png"
-                width={100}
-                height={100}
-                alt="Product Image"
-                className="rounded-md"
-              />
-              <div className="flex flex-col justify-start">
-                <h4 className="text-xl font-semibold">Rocket Single Seater</h4>
-              </div>
+          <div className="w-full lg:w-[300px] bg-myyellow p-6 rounded-lg shadow-md">
+            <h1 className="text-2xl font-semibold mb-6">Cart Totals</h1>
+            <div className="flex justify-between py-2 border-b">
+              <p>Subtotal</p>
+              <p>{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)} Rs</p>
             </div>
-
-            {/* Price */}
-            <div className="flex flex-col items-center justify-start w-full sm:w-auto">
-              <h4 className="text-xl">Rs. 50,000.00</h4>
+            <div className="flex justify-between py-2 border-b">
+              <p>Shipping</p>
+              <p>Free</p>
             </div>
-
-            {/* Quantity */}
-            <div className="flex flex-col items-center justify-start w-full sm:w-auto">
-              <input
-                type="number"
-                value="1"
-                className="w-16 p-2 border border-gray-300 rounded-md text-center"
-              />
+            <div className="flex justify-between py-2 border-b font-bold">
+              <p>Total</p>
+              <p>{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)} Rs</p>
             </div>
-
-            {/* Subtotal */}
-            <div className="flex flex-col items-center justify-start w-full sm:w-auto">
-              <h4 className="text-xl">Rs. 50,000.00</h4>
+            
+            <div className="flex justify-center mt-6">
+              <Link href="/checkout"><Button className="bg-green-600 w-full py-3 text-white">
+                Place Order
+              </Button>
+              </Link>
             </div>
-
-            {/* Remove Icon */}
-            <div className="flex items-center justify-center w-full sm:w-auto">
-              <Trash className="text-red-500 cursor-pointer" />
-            </div>
-          </div>
-
-          {/* Add more product rows as needed */}
-        </div>
-
-        {/* Cart Totals (Right side) */}
-        <div className="w-full lg:w-[300px] bg-myyellow p-6 rounded-lg shadow-md">
-          <h1 className="text-2xl font-semibold mb-6">Cart Totals</h1>
-          <div className="flex justify-between py-2 border-b">
-            <p>Subtotal</p>
-            <p>Rs. 250,000.00</p>
-          </div>
-          <div className="flex justify-between py-2 border-b">
-            <p>Shipping</p>
-            <p>Rs. 0.00</p>
-          </div>
-          <div className="flex justify-between py-2 border-b">
-            <p>Total</p>
-            <p>Rs. 250,000.00</p>
-          </div>
-          <div className='flex justify-center mt-8'>
-          {/* Checkout Button */}
-          <Link href="/checkout">
-          <Button variant="outline" className="border-2 border-black w-full md:w-[215px] h-16">
-            Check Out
-          </Button>
-          </Link>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <TextSection/>
-    </div>
-    </div>
   );
 }
-
-export default Page;
