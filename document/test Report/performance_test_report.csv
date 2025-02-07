@@ -1,0 +1,6 @@
+Test Case ID,Test Case Description,Test Steps,Expected Result,Actual Result,Status,Severity Level,Assigned To,Remarks
+TC001,Validate homepage loading speed,Load homepage and measure time,Homepage loads within 2s,Loaded in 1.8s,Passed,Medium,-,Performance meets expectations
+TC002,Test product search response time,Search for a product > Check response time,Results appear within 3s,Results appear in 2.5s,Passed,Medium,-,Acceptable speed
+TC003,Check cart update performance,Add product to cart > Check update speed,Cart updates instantly,Updates in 0.8s,Passed,High,-,Fast response
+TC004,Ensure checkout page responsiveness,Resize window > Verify layout,Layout should adjust properly,Responsive layout works,Passed,Medium,-,No issues
+TC005,Test API response under load,Simulate 100 concurrent users,API handles without slowdown,API response slowed to 4s,Failed,High,-,Needs optimization
